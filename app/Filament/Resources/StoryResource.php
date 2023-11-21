@@ -17,6 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -77,10 +78,14 @@ class StoryResource extends Resource
                     ->extraImgAttributes(['loading' => 'lazy'])
             ])->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                SelectFilter::make('category')
+                    ->relationship(name: 'category', titleAttribute: 'name')
+                    ->searchable()
+                    ->preload()
+                    ->multiple()
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -102,7 +107,7 @@ class StoryResource extends Resource
         return [
             'index' => Pages\ListStories::route('/'),
             'create' => Pages\CreateStory::route('/create'),
-            'view' => Pages\ViewStory::route('/{record}'),
+            // 'view' => Pages\ViewStory::route('/{record}'),
             'edit' => Pages\EditStory::route('/{record}/edit'),
         ];
     }
