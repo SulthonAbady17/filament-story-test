@@ -28,6 +28,7 @@ class AuthorPanelProvider extends PanelProvider
             ->path('author')
             ->login()
             ->registration()
+            ->profile()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -55,6 +56,7 @@ class AuthorPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->spa();
+            ->topNavigation();
+            // ->spa();
     }
 }

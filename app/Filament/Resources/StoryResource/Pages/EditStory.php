@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\StoryResource\Pages;
 
 use App\Filament\Resources\StoryResource;
+use App\Models\Story;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
@@ -17,4 +18,6 @@ class EditStory extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    
 }

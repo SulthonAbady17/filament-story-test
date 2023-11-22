@@ -24,7 +24,8 @@ class StoryFactory extends Factory
             'title' => fake()->sentence(),
             'synopsis' => fake()->paragraph(),
             'category_id' => Category::all()->random()->id,
-            'cover' => fake()->imageUrl(360, 640)
+            'cover' => fake()->imageUrl(360, 640),
+            'is_published' => fake()->boolean()
         ];
     }
 }

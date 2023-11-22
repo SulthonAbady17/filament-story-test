@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stories', function (Blueprint $table) {
+        Schema::create('episodes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title');
             $table->string('slug');
-            $table->text('synopsis');
-            $table->foreignUuid('category_id')
-                ->nullable()
+            $table->longText('body');
+            $table->foreignUuid('story_id')
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->nullOnDelete();
-            $table->string('cover')->nullable();
-            $table->boolean('is_published');
+                ->cascadeOnDelete();
+            $table->boolean('published');
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stories');
+        Schema::dropIfExists('episodes');
     }
 };
