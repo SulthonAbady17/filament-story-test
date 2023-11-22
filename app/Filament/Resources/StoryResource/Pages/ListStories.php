@@ -20,17 +20,17 @@ class ListStories extends ListRecords
         ];
     }
 
-    public function getTabs() : array {
+    public function getTabs(): array
+    {
         return [
             'all' => Tab::make()
-                ->badge(Story::query()->count()),
+                ->badge(Story::query()->where('user_id', auth()->id())->count()),
             'published' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', true))
-                // ->icon('heroicon-o-check-circle')
-                ->badge(Story::query()->where('is_published', true)->count()),
+                ->badge(Story::query()->where('user_id', auth()->id())->where('is_published', true)->count()),
             'unpublished' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', false))
-                ->badge(Story::query()->where('is_published', false)->count()),
+                ->badge(Story::query()->where('user_id', auth()->id())->where('is_published', false)->count()),
         ];
     }
 }

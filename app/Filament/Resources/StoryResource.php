@@ -3,10 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StoryResource\Pages;
-use App\Filament\Resources\StoryResource\RelationManagers;
 use App\Filament\Resources\StoryResource\RelationManagers\EpisodesRelationManager;
 use App\Models\Story;
-use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -14,21 +12,16 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use Filament\Resources\Components\Tab;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\SpatieTagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StoryResource extends Resource
 {
@@ -56,7 +49,7 @@ class StoryResource extends Resource
                         SpatieTagsInput::make('tags'),
                         Checkbox::make('is_published')
                             ->label('Publish')
-                            ->default(true)
+                            ->default(true),
                     ])->columnSpan(2),
                 Section::make()
                     ->schema([
@@ -65,7 +58,7 @@ class StoryResource extends Resource
                             ->maxSize(1024)
                             ->imageEditor()
                             ->imageCropAspectRatio('9:16')
-                            ->directory('covers')
+                            ->directory('covers'),
                     ])->columnSpan(1),
                 Section::make()
                     ->schema([
@@ -74,7 +67,7 @@ class StoryResource extends Resource
                             ->disableToolbarButtons([
                                 'attachFiles',
                                 'codeBlock',
-                                'link'
+                                'link',
                             ]),
                     ])->columnSpanFull(),
             ])->columns(3);
@@ -83,6 +76,7 @@ class StoryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('user_id', auth()->id()))
             ->recordTitleAttribute('slug')
             ->defaultSort('updated_at', 'desc')
             ->columns([
@@ -90,11 +84,14 @@ class StoryResource extends Resource
                     ->description(fn (Story $story): string => $story->created_at->since())
                     ->words(5)
                     ->searchable(),
+                TextColumn::make('user.name')
+                    ->label('Author')
+                    ->searchable(),
                 TextColumn::make('category.name')
                     ->searchable(),
                 SpatieTagsColumn::make('tags'),
                 ToggleColumn::make('is_published')
-                    ->label('Published')
+                    ->label('Published'),
             ])
             ->filters([
                 SelectFilter::make('category')
@@ -103,12 +100,18 @@ class StoryResource extends Resource
                     ->preload()
                     ->multiple()
                     ->native(false),
+                SelectFilter::make('user')
+                    ->relationship(name: 'user', titleAttribute: 'name')
+                    ->searchable()
+                    ->preload()
+                    ->multiple()
+                    ->native(false),
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
-                DeleteAction::make()
+                DeleteAction::make(),
                 // Tables\Actions\EditAction::make()
-                    // ->url(fn (Story $story): string => static::getUrl('edit', ['record' => $story->slug])),
+                // ->url(fn (Story $story): string => static::getUrl('edit', ['record' => $story->slug])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -120,7 +123,7 @@ class StoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            EpisodesRelationManager::class
+            EpisodesRelationManager::class,
         ];
     }
 

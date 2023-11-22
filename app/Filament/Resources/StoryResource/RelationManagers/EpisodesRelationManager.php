@@ -3,20 +3,15 @@
 namespace App\Filament\Resources\StoryResource\RelationManagers;
 
 use App\Models\Episode;
-use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EpisodesRelationManager extends RelationManager
 {
@@ -37,12 +32,12 @@ class EpisodesRelationManager extends RelationManager
                     ->disableToolbarButtons([
                         'attachFiles',
                         'codeBlock',
-                        'link'
+                        'link',
                     ])
                     ->columnSpanFull(),
                 Checkbox::make('is_published')
                     ->label('Publish')
-                    ->default(true)
+                    ->default(true),
             ]);
     }
 
@@ -57,15 +52,18 @@ class EpisodesRelationManager extends RelationManager
                     ->words(5)
                     ->searchable(),
                 ToggleColumn::make('is_published')
-                    ->label('Published')
+                    ->label('Published'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                // Action::make('create')
-                //     ->action(fn () => route('episodes.create'))
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['user_id'] = auth()->id();
+
+                        return $data;
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -8,14 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Tags\HasTags;
-use Spatie\Tags\Tag;
 
 class Story extends Model
 {
-    use HasFactory, HasUuids, HasTags, Sluggable;
+    use HasFactory, HasTags, HasUuids, Sluggable;
 
     protected $guarded = [];
 
@@ -25,9 +22,14 @@ class Story extends Model
     {
         return [
             'slug' => [
-                'source' => 'title'
+                'source' => 'title',
             ],
         ];
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function category(): BelongsTo
@@ -35,7 +37,8 @@ class Story extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function episodes() : HasMany {
+    public function episodes(): HasMany
+    {
         return $this->hasMany(Episode::class);
     }
 }

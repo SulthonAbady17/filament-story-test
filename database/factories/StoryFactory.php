@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use App\Models\Story;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,8 +25,9 @@ class StoryFactory extends Factory
             'title' => fake()->sentence(),
             'synopsis' => fake()->paragraph(),
             'category_id' => Category::all()->random()->id,
+            'user_id' => User::all()->random()->id,
             'cover' => fake()->imageUrl(360, 640),
-            'is_published' => fake()->boolean()
+            'is_published' => fake()->boolean(),
         ];
     }
 }

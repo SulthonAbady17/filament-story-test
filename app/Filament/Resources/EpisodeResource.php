@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EpisodeResource\Pages;
-use App\Filament\Resources\EpisodeResource\RelationManagers;
 use App\Models\Episode;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
@@ -13,13 +12,12 @@ use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EpisodeResource extends Resource
 {
     protected static ?string $model = Episode::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document';
 
     public static function form(Form $form): Form
     {
@@ -28,7 +26,7 @@ class EpisodeResource extends Resource
                 Section::make()
                     ->schema([
                         Forms\Components\Select::make('story_id')
-                            ->relationship('story', 'title')
+                            ->relationship('story', 'title', fn (Builder $query) => $query->where('user_id', auth()->id()))
                             ->searchable()
                             ->preload()
                             ->required(),
@@ -44,8 +42,8 @@ class EpisodeResource extends Resource
                             ->disableToolbarButtons([
                                 'attachFiles',
                                 'codeBlock',
-                                'link'
-                            ])
+                                'link',
+                            ]),
                     ])->columnSpanFull(),
                 Forms\Components\Checkbox::make('is_published')
                     ->label('Published')
@@ -56,23 +54,26 @@ class EpisodeResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('user_id', auth()->id()))
             ->recordTitleAttribute('slug')
             ->defaultSort('updated_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('title')
+                    ->description(fn (Episode $episode): string => $episode->created_at->since())
                     ->searchable()
                     ->words(5),
                 Tables\Columns\TextColumn::make('story.title')
+                    ->description(fn (Episode $episode): string => $episode->user->name)
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_published')
-                    ->label('Published')
+                    ->label('Published'),
             ])
             ->filters([
                 SelectFilter::make('story')
                     ->relationship('story', 'title')
                     ->searchable()
                     ->preload()
-                    ->native(false)
+                    ->native(false),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -16,18 +16,26 @@ class Episode extends Model
         'title',
         'body',
         'story_id',
-        'is_published'
+        'user_id',
+        'is_published',
     ];
-    
-    public function sluggable() : array {
+
+    public function sluggable(): array
+    {
         return [
             'slug' => [
-                'source' => 'title'
-            ]
+                'source' => 'title',
+            ],
         ];
     }
 
-    public function story() : BelongsTo {
+    public function story(): BelongsTo
+    {
         return $this->belongsTo(Story::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

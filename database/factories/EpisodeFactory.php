@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Story;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,8 @@ class EpisodeFactory extends Factory
             'title' => fake()->sentence(),
             'body' => fake()->paragraph(),
             'story_id' => Story::all()->random()->id,
-            'is_published' => fake()->boolean()
+            'user_id' => User::all()->random()->id,
+            'is_published' => fake()->boolean(),
         ];
     }
 }

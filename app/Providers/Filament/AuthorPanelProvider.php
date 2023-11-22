@@ -57,6 +57,6 @@ class AuthorPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->topNavigation();
-            // ->spa();
+        // ->spa();
     }
 }

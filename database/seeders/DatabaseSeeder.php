@@ -13,18 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            CategorySeeder::class,
-            StorySeeder::class,
-            EpisodeSeeder::class
-        ]);
-
-        // \App\Models\User::factory(10)->create();
-
         \App\Models\User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@test.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
+
+        \App\Models\User::factory(10)->create();
+
+        $this->call([
+            CategorySeeder::class,
+            StorySeeder::class,
+            EpisodeSeeder::class,
+        ]);
+
     }
 }
