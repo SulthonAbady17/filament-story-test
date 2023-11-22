@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -49,10 +50,12 @@ class EpisodesRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
-            ->defaultSort('title', 'asc')
+            ->defaultSort('created_at', 'asc')
             ->columns([
                 TextColumn::make('title')
-                    ->description(fn (Episode $episode): string => $episode->created_at->since()),
+                    ->description(fn (Episode $episode): string => $episode->created_at->since())
+                    ->words(5)
+                    ->searchable(),
                 ToggleColumn::make('is_published')
                     ->label('Published')
             ])
@@ -62,7 +65,7 @@ class EpisodesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                 // Action::make('create')
-                    // ->action(fn () => redirect()->route('filament.author.resources.stories.create'))
+                //     ->action(fn () => route('episodes.create'))
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

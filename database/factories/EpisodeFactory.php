@@ -21,7 +21,7 @@ class EpisodeFactory extends Factory
             'title' => fake()->sentence(),
             'body' => fake()->paragraph(),
             'story_id' => Story::all()->random()->id,
-            'published' => fake()->boolean()
+            'is_published' => fake()->boolean()
         ];
     }
 }

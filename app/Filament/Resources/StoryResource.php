@@ -51,7 +51,8 @@ class StoryResource extends Resource
                             ->relationship(name: 'category', titleAttribute: 'name')
                             ->searchable()
                             ->preload()
-                            ->required(),
+                            ->required()
+                            ->native(false),
                         SpatieTagsInput::make('tags'),
                         Checkbox::make('is_published')
                             ->label('Publish')
@@ -83,11 +84,14 @@ class StoryResource extends Resource
     {
         return $table
             ->recordTitleAttribute('slug')
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('updated_at', 'desc')
             ->columns([
                 TextColumn::make('title')
-                    ->description(fn (Story $story): string => $story->created_at->since()),
-                TextColumn::make('category.name'),
+                    ->description(fn (Story $story): string => $story->created_at->since())
+                    ->words(5)
+                    ->searchable(),
+                TextColumn::make('category.name')
+                    ->searchable(),
                 SpatieTagsColumn::make('tags'),
                 ToggleColumn::make('is_published')
                     ->label('Published')
@@ -97,12 +101,8 @@ class StoryResource extends Resource
                     ->relationship(name: 'category', titleAttribute: 'name')
                     ->searchable()
                     ->preload()
-                    ->multiple(),
-                // SelectFilter::make('tags')
-                //     ->relationship(name: 'tags', titleAttribute: 'name')
-                //     ->searchable()
-                //     ->preload()
-                //     ->multiple()
+                    ->multiple()
+                    ->native(false),
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),

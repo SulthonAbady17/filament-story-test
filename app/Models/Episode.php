@@ -16,7 +16,7 @@ class Episode extends Model
         'title',
         'body',
         'story_id',
-        'published'
+        'is_published'
     ];
     
     public function sluggable() : array {

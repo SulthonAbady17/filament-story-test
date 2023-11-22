@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Filament\Resources\StoryResource\Pages;
+namespace App\Filament\Resources\EpisodeResource\Pages;
 
-use App\Filament\Resources\StoryResource;
+use App\Filament\Resources\EpisodeResource;
+use App\Models\Episode;
 use App\Models\Story;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 
-class ListStories extends ListRecords
+class ListEpisodes extends ListRecords
 {
-    protected static string $resource = StoryResource::class;
+    protected static string $resource = EpisodeResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -23,14 +24,14 @@ class ListStories extends ListRecords
     public function getTabs() : array {
         return [
             'all' => Tab::make()
-                ->badge(Story::query()->count()),
+                ->badge(Episode::query()->count()),
             'published' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', true))
                 // ->icon('heroicon-o-check-circle')
-                ->badge(Story::query()->where('is_published', true)->count()),
+                ->badge(Episode::query()->where('is_published', true)->count()),
             'unpublished' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', false))
-                ->badge(Story::query()->where('is_published', false)->count()),
+                ->badge(Episode::query()->where('is_published', false)->count()),
         ];
     }
 }

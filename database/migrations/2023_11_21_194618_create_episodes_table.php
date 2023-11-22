@@ -20,7 +20,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('published');
+            $table->boolean('is_published');
             $table->timestamps();
         });
     }
