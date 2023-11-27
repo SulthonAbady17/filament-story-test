@@ -11,17 +11,17 @@ class StoryPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
-        //
+        return $user?->id === auth()->id();
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Story $story): bool
+    public function view(?User $user, Story $story): bool
     {
-        //
+        return $user?->id === $story->user->id;
     }
 
     /**
@@ -29,7 +29,7 @@ class StoryPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user?->id === auth()->id();
     }
 
     /**
@@ -37,7 +37,7 @@ class StoryPolicy
      */
     public function update(User $user, Story $story): bool
     {
-        //
+        return $user->id === $story->user->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class StoryPolicy
      */
     public function delete(User $user, Story $story): bool
     {
-        //
+        return $user->id === $story->user->id;
     }
 
     /**
@@ -53,7 +53,7 @@ class StoryPolicy
      */
     public function restore(User $user, Story $story): bool
     {
-        //
+        return $user->id === $story->user->id;
     }
 
     /**
@@ -61,6 +61,6 @@ class StoryPolicy
      */
     public function forceDelete(User $user, Story $story): bool
     {
-        //
+        return $user->id === $story->user->id;
     }
 }
