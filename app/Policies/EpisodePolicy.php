@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Episode;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class EpisodePolicy
 {
@@ -21,15 +20,15 @@ class EpisodePolicy
      */
     public function view(?User $user, Episode $episode): bool
     {
-        return $user?->id === $episode->user->id;
+        return $user?->id === $episode->user_id || $user->id === auth()->id();
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(?User $user): bool
+    public function create(User $user): bool
     {
-        return $user?->id === auth()->id();
+        return $user->id === auth()->id();
     }
 
     /**

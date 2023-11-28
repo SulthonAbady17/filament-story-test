@@ -29,6 +29,7 @@ class EpisodeResource extends Resource
                             ->relationship('story', 'title', fn (Builder $query) => $query->where('user_id', auth()->id()))
                             ->searchable()
                             ->preload()
+                            ->autofocus()
                             ->required(),
                         Forms\Components\TextInput::make('title')
                             ->required()
@@ -76,6 +77,7 @@ class EpisodeResource extends Resource
                     ->native(false),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -99,6 +101,7 @@ class EpisodeResource extends Resource
             'index' => Pages\ListEpisodes::route('/'),
             'create' => Pages\CreateEpisode::route('/create'),
             'edit' => Pages\EditEpisode::route('/{record}/edit'),
+            'view' => Pages\ViewEpisode::route('/{record}'),
         ];
     }
 }

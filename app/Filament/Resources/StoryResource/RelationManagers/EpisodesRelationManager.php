@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\StoryResource\RelationManagers;
 
+use App\Filament\Resources\EpisodeResource;
 use App\Models\Episode;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\RichEditor;
@@ -66,7 +67,10 @@ class EpisodesRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->url(fn (Episode $episode): string => EpisodeResource::getUrl('view', ['record' => $episode->id])),
+                Tables\Actions\EditAction::make()
+                    ->url(fn (Episode $episode): string => EpisodeResource::getUrl('edit', ['record' => $episode->id])),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
