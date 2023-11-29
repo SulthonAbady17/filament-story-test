@@ -13,24 +13,10 @@ class ListStories extends ListRecords
 {
     protected static string $resource = StoryResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
-
-    public function getTabs(): array
-    {
-        return [
-            'all' => Tab::make()
-                ->badge(Story::query()->where('user_id', auth()->id())->count()),
-            'published' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', true))
-                ->badge(Story::query()->where('user_id', auth()->id())->where('is_published', true)->count()),
-            'unpublished' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', false))
-                ->badge(Story::query()->where('user_id', auth()->id())->where('is_published', false)->count()),
-        ];
-    }
+    // protected function getHeaderActions(): array
+    // {
+    //     return [
+    //         Actions\CreateAction::make(),
+    //     ];
+    // }
 }

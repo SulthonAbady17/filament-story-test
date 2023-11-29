@@ -12,7 +12,7 @@ class EpisodePolicy
      */
     public function viewAny(?User $user): bool
     {
-        return $user?->id === auth()->id();
+        return $user?->id === auth()->id() || $user->id === auth()->id();
     }
 
     /**

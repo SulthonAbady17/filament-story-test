@@ -2,10 +2,13 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\EpisodeResource;
+use App\Filament\Resources\AuthorStoryResource;
 use Filament\FontProviders\GoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -18,6 +21,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use PharIo\Manifest\Author;
 
 class AuthorPanelProvider extends PanelProvider
 {
@@ -34,6 +38,16 @@ class AuthorPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->font('Poppins', provider: GoogleFontProvider::class)
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Your Stories')
+                    ->url(fn (): string => AuthorStoryResource::getUrl())
+                    ->icon('heroicon-o-book-open'),
+                MenuItem::make()
+                    ->label('Your Episodes')
+                    ->url(fn (): string => EpisodeResource::getUrl())
+                    ->icon('heroicon-o-document'),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -59,6 +73,5 @@ class AuthorPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->topNavigation();
-        // ->spa();
     }
 }

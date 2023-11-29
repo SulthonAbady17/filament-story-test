@@ -20,7 +20,7 @@ class StoryPolicy
      */
     public function view(?User $user, Story $story): bool
     {
-        return $user?->id === $story->user->id;
+        return $user?->id === $story->user->id || $user->id === auth()->id();
     }
 
     /**

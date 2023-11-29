@@ -17,7 +17,13 @@ class EpisodeResource extends Resource
 {
     protected static ?string $model = Episode::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static ?string $activeNavigationIcon = 'heroicon-s-document-text';
+
+    protected static ?int $navigationSort = 2;
+    
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {
