@@ -8,12 +8,12 @@ use App\Models\Story;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\Layout\Grid;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\SpatieTagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -35,7 +35,7 @@ class StoryResource extends Resource
             ->defaultSort('updated_at', 'desc')
             ->contentGrid([
                 'lg' => 2,
-                '2xl' => 3
+                '2xl' => 3,
             ])
             ->columns([
                 Split::make([
@@ -91,7 +91,7 @@ class StoryResource extends Resource
                     ->preload()
                     ->multiple()
                     ->native(false),
-            ]);
+            ], layout: FiltersLayout::Dropdown);
     }
 
     public static function getRelations(): array
