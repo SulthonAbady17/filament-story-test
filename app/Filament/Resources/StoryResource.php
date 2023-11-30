@@ -5,29 +5,17 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\StoryResource\Pages;
 use App\Filament\Resources\StoryResource\RelationManagers\EpisodesRelationManager;
 use App\Models\Story;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieTagsInput;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
-use Filament\Tables;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Grid;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\SpatieTagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class StoryResource extends Resource
 {
@@ -42,8 +30,13 @@ class StoryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->queryStringIdentifier('stories')
             ->recordTitleAttribute('slug')
             ->defaultSort('updated_at', 'desc')
+            ->contentGrid([
+                'lg' => 2,
+                '2xl' => 3
+            ])
             ->columns([
                 Split::make([
                     ImageColumn::make('cover')
@@ -62,15 +55,16 @@ class StoryResource extends Resource
                             ->weight(FontWeight::Bold)
                             ->hiddenFrom('lg'),
                         TextColumn::make('user.name')
-                            ->formatStateUsing(fn (string $state): string => "By " . $state)
-                            ->size(TextColumnSize::ExtraSmall)
-                            ->weight(FontWeight::Bold)
+                            ->formatStateUsing(fn (string $state): string => 'By '.$state)
+                            ->weight(FontWeight::SemiBold)
                             ->color('gray')
                             ->label('Author')
                             ->searchable(),
                         TextColumn::make('synopsis')
                             ->markdown()
-                            ->words(10),
+                            ->words(10)
+                            ->color('gray')
+                            ->size(TextColumnSize::ExtraSmall),
                         // SpatieTagsColumn::make('tags'),
                         TextColumn::make('updated_at')
                             ->size(TextColumnSize::ExtraSmall)
@@ -78,11 +72,11 @@ class StoryResource extends Resource
                             ->color('gray')
                             ->hiddenFrom('lg'),
                     ])
-                        ->alignStart(),
+                        ->space(1),
                     // TextColumn::make('category.name')
                     //     ->searchable()
                     //     ->visibleFrom('md'),
-                ])
+                ]),
             ])
             ->filters([
                 SelectFilter::make('category')

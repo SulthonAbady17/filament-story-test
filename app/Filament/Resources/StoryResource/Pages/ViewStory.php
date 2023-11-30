@@ -5,9 +5,6 @@ namespace App\Filament\Resources\StoryResource\Pages;
 use App\Filament\Resources\EpisodeResource;
 use App\Filament\Resources\StoryResource;
 use App\Models\Episode;
-use Filament\Actions;
-use Filament\Actions\ViewAction;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -40,9 +37,9 @@ class ViewStory extends ViewRecord
                             ->alignCenter()
                             ->weight(FontWeight::Black)
                             ->size(TextEntrySize::Medium)
-                            ->url(fn (Episode $episode): string => EpisodeResource::getUrl('view', ['record' => $episode->id]))
+                            ->url(fn (Episode $episode): string => EpisodeResource::getUrl('view', ['record' => $episode->id])),
                     ])
-                    ->columnSpanFull()
+                    ->columnSpanFull(),
             ]);
     }
 }

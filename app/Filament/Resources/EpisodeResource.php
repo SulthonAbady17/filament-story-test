@@ -22,7 +22,7 @@ class EpisodeResource extends Resource
     protected static ?string $activeNavigationIcon = 'heroicon-s-document-text';
 
     protected static ?int $navigationSort = 2;
-    
+
     protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form

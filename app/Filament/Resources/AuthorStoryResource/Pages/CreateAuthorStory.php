@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\AuthorStoryResource\Pages;
 
 use App\Filament\Resources\AuthorStoryResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAuthorStory extends CreateRecord
